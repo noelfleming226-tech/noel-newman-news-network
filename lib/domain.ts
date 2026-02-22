@@ -15,6 +15,7 @@ export type PostStatus = (typeof POST_STATUS)[keyof typeof POST_STATUS];
 
 export const MEDIA_TYPE = {
   YOUTUBE: "YOUTUBE",
+  TWEET: "TWEET",
   VIDEO: "VIDEO",
   IMAGE: "IMAGE",
   AUDIO: "AUDIO",

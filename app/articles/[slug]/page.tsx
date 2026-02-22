@@ -4,12 +4,10 @@ import { format } from "date-fns";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
-import { MediaRenderer } from "@/components/media-renderer";
 import { SiteHeader } from "@/components/site-header";
 import { FounderBranding } from "@/components/founder-branding";
+import { StoryBodyWithInlineMedia } from "@/components/story-body-with-inline-media";
 import { getVisiblePostBySlug } from "@/lib/posts";
 
 const COVER_HEIGHT_BY_SIZE = {
@@ -102,11 +100,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           ) : null}
 
-          <MediaRenderer media={post.media} />
-
-          <div className="rich-body">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.body}</ReactMarkdown>
-          </div>
+          <StoryBodyWithInlineMedia body={post.body} media={post.media} />
         </article>
 
         <aside className="article-aside">

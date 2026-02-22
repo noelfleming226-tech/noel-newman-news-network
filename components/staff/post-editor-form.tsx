@@ -2,13 +2,11 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { useActionState, useMemo, useRef, useState } from "react";
 
-import { MediaRenderer } from "@/components/media-renderer";
+import { StoryBodyWithInlineMedia } from "@/components/story-body-with-inline-media";
 
-type MediaType = "YOUTUBE" | "VIDEO" | "IMAGE" | "AUDIO" | "EMBED";
+type MediaType = "YOUTUBE" | "TWEET" | "VIDEO" | "IMAGE" | "AUDIO" | "EMBED";
 type PostStatus = "DRAFT" | "SCHEDULED" | "PUBLISHED";
 type CoverImageSize = "COMPACT" | "STANDARD" | "FEATURE";
 type CoverImagePosition = "TOP" | "CENTER" | "BOTTOM";
@@ -50,7 +48,7 @@ const COVER_OBJECT_POSITION_BY_ALIGNMENT: Record<CoverImagePosition, string> = {
   BOTTOM: "center bottom",
 };
 
-const MEDIA_TYPES: MediaType[] = ["YOUTUBE", "VIDEO", "IMAGE", "AUDIO", "EMBED"];
+const MEDIA_TYPES: MediaType[] = ["YOUTUBE", "TWEET", "VIDEO", "IMAGE", "AUDIO", "EMBED"];
 const MEDIA_TYPE = {
   IMAGE: "IMAGE" as MediaType,
 } as const;
@@ -187,6 +185,7 @@ export function PostEditorForm({
   const [media, setMedia] = useState<MediaDraft[]>(
     initialValues.media.length > 0 ? initialValues.media : [createEmptyMediaDraft()],
   );
+  const bodyTextareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const mediaPayload = useMemo(
     () => JSON.stringify(media.map((item) => ({ type: item.type, url: item.url, caption: item.caption }))),
@@ -208,6 +207,33 @@ export function PostEditorForm({
       ...current,
       [key]: value,
     }));
+  }
+
+  function insertInlineMediaToken(blockIndex: number) {
+    const token = `{{media:${blockIndex + 1}}}`;
+
+    updateDraftField(
+      "body",
+      (() => {
+        const textarea = bodyTextareaRef.current;
+
+        if (!textarea) {
+          return draft.body.trim() ? `${draft.body}\n\n${token}\n` : `${token}\n`;
+        }
+
+        const start = textarea.selectionStart ?? draft.body.length;
+        const end = textarea.selectionEnd ?? start;
+        const nextValue = `${draft.body.slice(0, start)}${token}${draft.body.slice(end)}`;
+
+        queueMicrotask(() => {
+          textarea.focus();
+          const caret = start + token.length;
+          textarea.setSelectionRange(caret, caret);
+        });
+
+        return nextValue;
+      })(),
+    );
   }
 
   return (
@@ -287,6 +313,7 @@ export function PostEditorForm({
             <label>
               Body (Markdown supported)
               <textarea
+                ref={bodyTextareaRef}
                 name="body"
                 rows={14}
                 value={draft.body}
@@ -294,6 +321,10 @@ export function PostEditorForm({
                 required
               />
             </label>
+            <p className="staff-form__hint">
+              Place media inline with <code>{"{{media:1}}"}</code>, <code>{"{{media:2}}"}</code>, etc. Tweets can be
+              embedded inline using a media block set to <code>TWEET</code>.
+            </p>
 
             <div className="staff-form__grid">
               <label>
@@ -457,7 +488,7 @@ export function PostEditorForm({
                           current.map((entry) => (entry.id === item.id ? { ...entry, url: nextUrl } : entry)),
                         );
                       }}
-                      placeholder="https://"
+                      placeholder={item.type === "TWEET" ? "https://x.com/.../status/..." : "https://"}
                     />
                   </label>
 
@@ -475,6 +506,19 @@ export function PostEditorForm({
                       }}
                     />
                   </label>
+
+                  <div className="media-editor__inline-tools">
+                    <span className="media-editor__inline-token">
+                      Inline token: <code>{`{{media:${index + 1}}}`}</code>
+                    </span>
+                    <button
+                      type="button"
+                      className="button button--ghost button--small"
+                      onClick={() => insertInlineMediaToken(index)}
+                    >
+                      Insert Token in Body
+                    </button>
+                  </div>
 
                   <button
                     type="button"
@@ -532,13 +576,10 @@ export function PostEditorForm({
                 </div>
               ) : null}
 
-              <MediaRenderer media={previewMedia.map((item) => ({ ...item, id: item.id }))} />
-
-              <div className="rich-body">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {draft.body.trim() || "Write your story body to preview markdown output."}
-                </ReactMarkdown>
-              </div>
+              <StoryBodyWithInlineMedia
+                body={draft.body.trim() || "Write your story body to preview markdown output."}
+                media={previewMedia.map((item) => ({ ...item, id: item.id }))}
+              />
 
               {draft.excerpt.trim() ? <p className="post-preview__excerpt">{draft.excerpt}</p> : null}
             </div>

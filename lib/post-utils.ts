@@ -128,6 +128,47 @@ export function toYouTubeEmbedUrl(url: string): string {
   return url;
 }
 
+export function extractTweetStatusId(url: string): string | null {
+  try {
+    const candidate = new URL(url);
+    const hostname = candidate.hostname.toLowerCase();
+
+    if (!hostname.includes("twitter.com") && !hostname.includes("x.com")) {
+      return null;
+    }
+
+    const parts = candidate.pathname.split("/").filter(Boolean);
+    const statusIndex = parts.findIndex((part) => part.toLowerCase() === "status");
+    const idCandidate = statusIndex >= 0 ? parts[statusIndex + 1] : null;
+
+    if (!idCandidate) {
+      return null;
+    }
+
+    const normalizedId = idCandidate.split("?")[0];
+    return /^\d+$/.test(normalizedId) ? normalizedId : null;
+  } catch {
+    return null;
+  }
+}
+
+export function toTweetEmbedUrl(url: string): string {
+  const tweetId = extractTweetStatusId(url);
+
+  if (!tweetId) {
+    return url;
+  }
+
+  const params = new URLSearchParams({
+    id: tweetId,
+    theme: "dark",
+    dnt: "true",
+    align: "center",
+  });
+
+  return `https://platform.twitter.com/embed/Tweet.html?${params.toString()}`;
+}
+
 export function parseOptionalUrl(rawValue: string): string | null {
   if (!rawValue.trim()) {
     return null;
