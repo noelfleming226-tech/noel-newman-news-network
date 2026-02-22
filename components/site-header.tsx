@@ -19,8 +19,8 @@ export function SiteHeader() {
           <SiteSearchForm compact />
         </div>
         <nav className="site-nav" aria-label="Main">
-          <Link href="/">Latest</Link>
-          <a href="#proprietors">Proprietors</a>
+          <Link href="/#latest-news">Latest</Link>
+          <Link href="/#proprietors">Proprietors</Link>
           <Link href="/staff/login">Staff Portal</Link>
         </nav>
       </div>

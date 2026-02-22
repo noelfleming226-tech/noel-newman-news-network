@@ -41,7 +41,7 @@ export default async function HomePage() {
         </section>
 
         {leadPost ? (
-          <section className="lead-story">
+          <section id="latest-news" className="lead-story">
             <p className="lead-story__kicker">Featured Story</p>
             <h2>{leadPost.title}</h2>
             <p>{leadPost.excerpt || "Open the story for full coverage."}</p>
@@ -54,7 +54,7 @@ export default async function HomePage() {
           </section>
         ) : null}
 
-        <section className="post-grid" aria-label="Latest articles">
+        <section id={leadPost ? undefined : "latest-news"} className="post-grid" aria-label="Latest articles">
           {posts.slice(leadPost ? 1 : 0).map((post: VisiblePost) => (
             <PostCard key={post.id} post={post} />
           ))}
