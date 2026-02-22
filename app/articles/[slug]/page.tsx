@@ -7,6 +7,8 @@ import { notFound } from "next/navigation";
 
 import { SiteHeader } from "@/components/site-header";
 import { FounderBranding } from "@/components/founder-branding";
+import { PostEngagementTracker } from "@/components/post-engagement-tracker";
+import { PostViewTracker } from "@/components/post-view-tracker";
 import { StoryBodyWithInlineMedia } from "@/components/story-body-with-inline-media";
 import { getVisiblePostBySlug } from "@/lib/posts";
 
@@ -65,6 +67,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <SiteHeader />
       <main className="article-layout">
         <article className="article">
+          <PostViewTracker postId={post.id} />
+          <PostEngagementTracker postId={post.id} />
           <p className="article__eyebrow">NN^2 · Noel Newman News Network</p>
           <h1>{post.title}</h1>
           <p className="article__meta">

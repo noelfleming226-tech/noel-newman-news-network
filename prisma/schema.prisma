@@ -38,6 +38,11 @@ enum CoverImagePosition {
   BOTTOM
 }
 
+enum EngagementEventType {
+  LINK_CLICK
+  TIME_ON_PAGE
+}
+
 model User {
   id           String    @id @default(cuid())
   name         String
@@ -97,11 +102,48 @@ model Post {
   author        User         @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Restrict)
   media         MediaAsset[]
   tags          PostTag[]
+  viewEvents    PostViewEvent[]
+  engagementEvents PostEngagementEvent[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
   @@index([status, publishedAt])
   @@index([categoryId])
+}
+
+model PostViewEvent {
+  id             String   @id @default(cuid())
+  postId          String
+  post            Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  sessionKeyHash  String
+  userAgentHash   String?
+  referrerHost    String?
+  path            String
+  occurredAt      DateTime @default(now())
+
+  @@index([postId, occurredAt])
+  @@index([occurredAt])
+  @@index([postId, sessionKeyHash, occurredAt])
+  @@index([referrerHost, occurredAt])
+}
+
+model PostEngagementEvent {
+  id             String              @id @default(cuid())
+  postId          String
+  post            Post                @relation(fields: [postId], references: [id], onDelete: Cascade)
+  type            EngagementEventType
+  sessionKeyHash  String
+  userAgentHash   String?
+  referrerHost    String?
+  path            String
+  targetUrl       String?
+  targetHost      String?
+  secondsOnPage   Int?
+  occurredAt      DateTime            @default(now())
+
+  @@index([postId, type, occurredAt])
+  @@index([type, occurredAt])
+  @@index([postId, sessionKeyHash, type, occurredAt])
 }
 
 model MediaAsset {

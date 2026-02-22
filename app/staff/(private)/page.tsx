@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { format } from "date-fns";
 
+import { AnalyticsOverview } from "@/components/staff/analytics-overview";
+import { getStaffAnalyticsSummary } from "@/lib/analytics";
 import { getStaffPostIndex } from "@/lib/posts";
 
 type StaffPost = Awaited<ReturnType<typeof getStaffPostIndex>>[number];
@@ -12,6 +14,7 @@ export const metadata = {
 
 export default async function StaffDashboardPage() {
   const posts = await getStaffPostIndex();
+  const analytics = await getStaffAnalyticsSummary(14);
 
   return (
     <section className="staff-panel">
@@ -26,6 +29,8 @@ export default async function StaffDashboardPage() {
         </Link>
       </div>
 
+      <AnalyticsOverview summary={analytics} />
+
       {posts.length === 0 ? (
         <p className="staff-empty">No posts yet. Start by creating your first article.</p>
       ) : (
@@ -37,6 +42,11 @@ export default async function StaffDashboardPage() {
                 <th>Status</th>
                 <th>Author</th>
                 <th>Publish Date</th>
+                <th>Views (14d)</th>
+                <th>Unique (14d)</th>
+                <th>Clicks (14d)</th>
+                <th>Avg Time (14d)</th>
+                <th>Total Views</th>
                 <th>Media Blocks</th>
                 <th>Actions</th>
               </tr>
@@ -53,6 +63,11 @@ export default async function StaffDashboardPage() {
                   </td>
                   <td>{post.author.name}</td>
                   <td>{post.publishedAt ? format(post.publishedAt, "PPp") : "Not set"}</td>
+                  <td>{analytics.postWindowMetrics[post.id]?.views ?? 0}</td>
+                  <td>{analytics.postWindowMetrics[post.id]?.uniqueViews ?? 0}</td>
+                  <td>{analytics.postWindowMetrics[post.id]?.linkClicks ?? 0}</td>
+                  <td>{analytics.postWindowMetrics[post.id]?.avgSecondsOnPage ?? 0}s</td>
+                  <td>{analytics.postLifetimeViews[post.id] ?? 0}</td>
                   <td>{post.media.length}</td>
                   <td>
                     <div className="staff-table__actions">
