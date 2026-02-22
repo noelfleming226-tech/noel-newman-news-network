@@ -1,8 +1,11 @@
-import { MediaType, PostStatus } from "@prisma/client";
 import { z } from "zod";
 
+import { MEDIA_TYPE, POST_STATUS, type MediaType, type PostStatus } from "@/lib/domain";
+
+const MEDIA_TYPE_VALUES = Object.values(MEDIA_TYPE) as [MediaType, ...MediaType[]];
+
 const mediaInputSchema = z.object({
-  type: z.nativeEnum(MediaType),
+  type: z.enum(MEDIA_TYPE_VALUES),
   url: z.string().trim().url(),
   caption: z.string().trim().max(180).optional(),
 });
@@ -98,7 +101,7 @@ export function parseOptionalDate(value: string | null): Date | null {
 }
 
 export function normalizePublishState(status: PostStatus, publishDate: Date | null): Date | null {
-  if (status === PostStatus.PUBLISHED && !publishDate) {
+  if (status === POST_STATUS.PUBLISHED && !publishDate) {
     return new Date();
   }
 

@@ -1,9 +1,9 @@
 "use server";
 
-import { PostStatus } from "@prisma/client";
 import { z } from "zod";
 
 import { requireStaffUser } from "@/lib/auth";
+import { POST_STATUS } from "@/lib/domain";
 import { createUniqueSlug } from "@/lib/posts";
 import {
   normalizePublishState,
@@ -28,7 +28,7 @@ const postSchema = z.object({
   excerpt: z.string().trim().max(300).optional(),
   body: z.string().trim().min(20),
   authorId: z.string().trim().min(1),
-  status: z.nativeEnum(PostStatus),
+  status: z.enum([POST_STATUS.DRAFT, POST_STATUS.SCHEDULED, POST_STATUS.PUBLISHED]),
   publishedAt: z.string().trim().optional(),
   coverImageUrl: z.string().trim().optional(),
   mediaPayload: z.string().optional(),
@@ -91,7 +91,7 @@ export async function savePostAction(_: PostActionState, formData: FormData): Pr
     };
   }
 
-  if (parsedData.status === PostStatus.SCHEDULED) {
+  if (parsedData.status === POST_STATUS.SCHEDULED) {
     if (!publishDate) {
       return {
         error: "Scheduled posts require a future publish date.",

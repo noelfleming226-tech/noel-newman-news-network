@@ -1,7 +1,6 @@
-import { PostStatus } from "@prisma/client";
-
 import { PostEditorForm } from "@/components/staff/post-editor-form";
 import { requireStaffUser } from "@/lib/auth";
+import { POST_STATUS } from "@/lib/domain";
 import { prisma } from "@/lib/prisma";
 
 import { savePostAction } from "../actions";
@@ -34,7 +33,7 @@ export default async function NewPostPage() {
         slug: "",
         excerpt: "",
         body: "## Headline\n\nWrite your story here.",
-        status: PostStatus.DRAFT,
+        status: POST_STATUS.DRAFT,
         publishedAt: "",
         coverImageUrl: "",
         authorId: staffUser.id,

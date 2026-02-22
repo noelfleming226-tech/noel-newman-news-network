@@ -2,10 +2,10 @@ import "server-only";
 
 import { createHash, randomBytes } from "node:crypto";
 
-import { UserRole } from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { USER_ROLE } from "@/lib/domain";
 import { prisma } from "@/lib/prisma";
 
 const STAFF_SESSION_COOKIE = "nnn_staff_session";
@@ -101,7 +101,7 @@ export async function getCurrentStaffUser() {
 export async function requireStaffUser() {
   const user = await getCurrentStaffUser();
 
-  if (!user || (user.role !== UserRole.STAFF && user.role !== UserRole.ADMIN)) {
+  if (!user || (user.role !== USER_ROLE.STAFF && user.role !== USER_ROLE.ADMIN)) {
     redirect("/staff/login");
   }
 

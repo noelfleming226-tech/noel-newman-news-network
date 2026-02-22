@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { MediaType } from "@prisma/client";
-
+import { MEDIA_TYPE, type MediaType } from "@/lib/domain";
 import { toYouTubeEmbedUrl } from "@/lib/post-utils";
 
 type MediaRendererProps = {
@@ -23,7 +22,7 @@ export function MediaRenderer({ media }: MediaRendererProps) {
       {media.map((item) => {
         const caption = item.caption ? <figcaption>{item.caption}</figcaption> : null;
 
-        if (item.type === MediaType.YOUTUBE) {
+        if (item.type === MEDIA_TYPE.YOUTUBE) {
           return (
             <figure key={item.id} className="media-card">
               <div className="media-frame media-frame--video">
@@ -39,7 +38,7 @@ export function MediaRenderer({ media }: MediaRendererProps) {
           );
         }
 
-        if (item.type === MediaType.VIDEO) {
+        if (item.type === MEDIA_TYPE.VIDEO) {
           return (
             <figure key={item.id} className="media-card">
               <video className="media-frame media-frame--video" controls src={item.url} />
@@ -48,7 +47,7 @@ export function MediaRenderer({ media }: MediaRendererProps) {
           );
         }
 
-        if (item.type === MediaType.AUDIO) {
+        if (item.type === MEDIA_TYPE.AUDIO) {
           return (
             <figure key={item.id} className="media-card">
               <audio className="media-frame media-frame--audio" controls src={item.url} />
@@ -57,7 +56,7 @@ export function MediaRenderer({ media }: MediaRendererProps) {
           );
         }
 
-        if (item.type === MediaType.EMBED) {
+        if (item.type === MEDIA_TYPE.EMBED) {
           return (
             <figure key={item.id} className="media-card">
               <div className="media-frame media-frame--video">

@@ -1,6 +1,6 @@
-import { MediaType, PostStatus, UserRole } from "@prisma/client";
 import { hash } from "bcryptjs";
 
+import { MEDIA_TYPE, POST_STATUS, USER_ROLE } from "../lib/domain";
 import { prisma } from "../lib/prisma";
 
 async function main() {
@@ -15,14 +15,14 @@ async function main() {
       name: "Noel Fleming",
       username: "noelfleming",
       passwordHash,
-      role: UserRole.ADMIN,
+      role: USER_ROLE.ADMIN,
     },
     create: {
       name: "Noel Fleming",
       email: "noel@nnnn.local",
       username: "noelfleming",
       passwordHash,
-      role: UserRole.ADMIN,
+      role: USER_ROLE.ADMIN,
     },
   });
 
@@ -34,14 +34,14 @@ async function main() {
       name: "Phil Newman",
       username: "philnewman",
       passwordHash,
-      role: UserRole.ADMIN,
+      role: USER_ROLE.ADMIN,
     },
     create: {
       name: "Phil Newman",
       email: "phil@nnnn.local",
       username: "philnewman",
       passwordHash,
-      role: UserRole.ADMIN,
+      role: USER_ROLE.ADMIN,
     },
   });
 
@@ -72,7 +72,7 @@ async function main() {
           "",
           "Thanks for following the launch.",
         ].join("\n"),
-        status: PostStatus.PUBLISHED,
+        status: POST_STATUS.PUBLISHED,
         publishedAt: new Date(),
         authorId: noel.id,
         coverImageUrl:
@@ -80,13 +80,13 @@ async function main() {
         media: {
           create: [
             {
-              type: MediaType.YOUTUBE,
+              type: MEDIA_TYPE.YOUTUBE,
               url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
               caption: "Sample YouTube embed block.",
               sortOrder: 0,
             },
             {
-              type: MediaType.AUDIO,
+              type: MEDIA_TYPE.AUDIO,
               url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
               caption: "Sample external audio block.",
               sortOrder: 1,
