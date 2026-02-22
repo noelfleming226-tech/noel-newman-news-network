@@ -46,7 +46,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <SiteHeader />
       <main className="article-layout">
         <article className="article">
-          <p className="article__eyebrow">Noel Newman News Network</p>
+          <p className="article__eyebrow">NN^2 · Noel Newman News Network</p>
           <h1>{post.title}</h1>
           <p className="article__meta">
             {post.publishedAt ? format(post.publishedAt, "PPPP p") : "Date pending"} · {post.author.name}

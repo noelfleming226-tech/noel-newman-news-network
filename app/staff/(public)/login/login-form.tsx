@@ -12,11 +12,11 @@ export function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginAction, INITIAL_STATE);
 
   useEffect(() => {
-    if (!state.error) {
+    if (state.success) {
       router.replace("/staff");
       router.refresh();
     }
-  }, [router, state.error]);
+  }, [router, state.success]);
 
   return (
     <form action={formAction} className="staff-auth-form">

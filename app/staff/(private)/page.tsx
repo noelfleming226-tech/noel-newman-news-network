@@ -14,7 +14,7 @@ export default async function StaffDashboardPage() {
   return (
     <section className="staff-panel">
       <div className="staff-panel__head">
-        <h1>Publishing Dashboard</h1>
+        <h1>NN^2 Publishing Dashboard</h1>
         <p>Manage drafts, scheduled stories, and live posts in one place.</p>
       </div>
 

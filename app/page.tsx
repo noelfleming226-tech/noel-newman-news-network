@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { format } from "date-fns";
 
+import { BrandMark } from "@/components/brand-mark";
 import { PostCard } from "@/components/post-card";
 import { SiteHeader } from "@/components/site-header";
 import { getVisiblePosts } from "@/lib/posts";
@@ -15,6 +16,7 @@ export default async function HomePage() {
       <SiteHeader />
       <main>
         <section className="hero">
+          <BrandMark />
           <p className="hero__eyebrow">Independent Reporting + Modern Storytelling</p>
           <h1>Noel Newman News Network</h1>
           <p>
@@ -60,7 +62,7 @@ export default async function HomePage() {
         </section>
 
         <section id="proprietors" className="proprietors">
-          <p className="proprietors__eyebrow">Ownership</p>
+          <p className="proprietors__eyebrow">NN^2 Ownership</p>
           <h2>Primary Proprietors</h2>
           <div className="proprietors__grid">
             <article>
@@ -78,7 +80,7 @@ export default async function HomePage() {
         </section>
       </main>
       <footer className="site-footer">
-        <p>Noel Newman News Network</p>
+        <p>NN^2 · Noel Newman News Network</p>
         <p>Built for multimedia journalism in a modern dark-mode experience.</p>
       </footer>
     </div>

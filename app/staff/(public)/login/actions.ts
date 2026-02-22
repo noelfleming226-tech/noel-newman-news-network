@@ -7,6 +7,7 @@ import { createStaffSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export type LoginState = {
+  success?: boolean;
   error?: string;
 };
 
@@ -58,5 +59,5 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
 
   await createStaffSession(staffUser.id);
 
-  return {};
+  return { success: true };
 }

@@ -21,7 +21,7 @@ export default async function StaffLoginPage() {
       <SiteHeader />
       <main className="auth-page">
         <section className="auth-card">
-          <p className="auth-card__eyebrow">Staff Access</p>
+          <p className="auth-card__eyebrow">NN^2 Staff Access</p>
           <h1>Sign in to the Noel Newman News Network portal</h1>
           <p>
             Manage article publishing, mixed-media embeds, and future scheduling from this private staff console.

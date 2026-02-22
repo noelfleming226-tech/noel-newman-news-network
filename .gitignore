@@ -42,6 +42,9 @@ next-env.d.ts
 
 /app/generated/prisma
 
+# local preview artifacts
+.artifacts/
+
 # local sqlite db
 prisma/dev.db
 prisma/dev.db-journal

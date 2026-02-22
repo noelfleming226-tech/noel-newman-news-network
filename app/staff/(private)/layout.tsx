@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { BrandMark } from "@/components/brand-mark";
 import { requireStaffUser } from "@/lib/auth";
 
 import { logoutAction } from "./logout/actions";
@@ -14,7 +15,7 @@ export default async function StaffPrivateLayout({
   return (
     <div className="staff-shell">
       <aside className="staff-sidebar">
-        <h1>Noel Newman News Network</h1>
+        <BrandMark />
         <p className="staff-sidebar__role">Staff Console</p>
         <nav>
           <Link href="/staff">Dashboard</Link>
