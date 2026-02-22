@@ -7,6 +7,8 @@ import { PostCard } from "@/components/post-card";
 import { SiteHeader } from "@/components/site-header";
 import { getVisiblePosts } from "@/lib/posts";
 
+type VisiblePost = Awaited<ReturnType<typeof getVisiblePosts>>[number];
+
 export default async function HomePage() {
   const posts = await getVisiblePosts();
   const leadPost = posts[0];
@@ -47,7 +49,7 @@ export default async function HomePage() {
         ) : null}
 
         <section className="post-grid" aria-label="Latest articles">
-          {posts.slice(leadPost ? 1 : 0).map((post) => (
+          {posts.slice(leadPost ? 1 : 0).map((post: VisiblePost) => (
             <PostCard key={post.id} post={post} />
           ))}
 
