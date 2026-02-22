@@ -9,6 +9,8 @@ import { getVisiblePosts } from "@/lib/posts";
 
 type VisiblePost = Awaited<ReturnType<typeof getVisiblePosts>>[number];
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const posts = await getVisiblePosts();
   const leadPost = posts[0];
