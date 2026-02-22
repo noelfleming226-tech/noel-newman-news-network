@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { MEDIA_TYPE, type MediaType } from "@/lib/domain";
-import { extractTweetStatusId, toTweetEmbedUrl, toYouTubeEmbedUrl } from "@/lib/post-utils";
+import { extractTweetStatusId, toYouTubeEmbedUrl } from "@/lib/post-utils";
+import { TweetEmbedFrame } from "@/components/tweet-embed-frame";
 
 export type MediaItem = {
   id: string;
@@ -44,16 +45,14 @@ export function MediaFigure({ item }: MediaFigureProps) {
 
     return (
       <figure key={item.id} className="media-card media-card--tweet">
-        <div className="media-card__label">NN^2 · Social Post Reference</div>
+        <div className="media-card__meta">
+          <div className="media-card__label">NN^2 · Social Post Reference</div>
+          <a className="media-card__source-link" href={item.url} target="_blank" rel="noopener noreferrer">
+            Open on X
+          </a>
+        </div>
         {tweetId ? (
-          <div className="media-frame media-frame--tweet">
-            <iframe
-              src={toTweetEmbedUrl(item.url)}
-              title="Embedded X post"
-              loading="lazy"
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
-          </div>
+          <TweetEmbedFrame url={item.url} />
         ) : (
           <div className="media-frame media-frame--tweet media-frame--tweet-fallback">
             <p>Unable to parse the X/Twitter post URL for embed. Open the source link instead:</p>
