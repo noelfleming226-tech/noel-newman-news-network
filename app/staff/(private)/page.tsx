@@ -4,6 +4,8 @@ import { format } from "date-fns";
 
 import { getStaffPostIndex } from "@/lib/posts";
 
+type StaffPost = Awaited<ReturnType<typeof getStaffPostIndex>>[number];
+
 export const metadata = {
   title: "Staff Dashboard | Noel Newman News Network",
 };
@@ -40,7 +42,7 @@ export default async function StaffDashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {posts.map((post) => (
+              {posts.map((post: StaffPost) => (
                 <tr key={post.id}>
                   <td>
                     <strong>{post.title}</strong>

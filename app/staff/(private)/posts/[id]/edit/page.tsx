@@ -7,6 +7,8 @@ import { prisma } from "@/lib/prisma";
 
 import { savePostAction } from "../../actions";
 
+type StaffPostForEdit = NonNullable<Awaited<ReturnType<typeof getPostByIdForStaff>>>;
+
 export const metadata = {
   title: "Edit Post | Noel Newman News Network",
 };
@@ -54,7 +56,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         publishedAt: toDateTimeLocalValue(post.publishedAt),
         coverImageUrl: post.coverImageUrl ?? "",
         authorId: post.authorId,
-        media: post.media.map((item) => ({
+        media: (post as StaffPostForEdit).media.map((item: StaffPostForEdit["media"][number]) => ({
           id: item.id,
           type: item.type,
           url: item.url,
