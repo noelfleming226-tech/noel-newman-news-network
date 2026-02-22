@@ -1,10 +1,21 @@
 "use client";
 
-import { MediaType, PostStatus } from "@prisma/client";
 import Link from "next/link";
 import { useActionState, useMemo, useState } from "react";
 
-const MEDIA_TYPES = Object.values(MediaType);
+type MediaType = "YOUTUBE" | "VIDEO" | "IMAGE" | "AUDIO" | "EMBED";
+type PostStatus = "DRAFT" | "SCHEDULED" | "PUBLISHED";
+
+const POST_STATUS = {
+  DRAFT: "DRAFT" as PostStatus,
+  SCHEDULED: "SCHEDULED" as PostStatus,
+  PUBLISHED: "PUBLISHED" as PostStatus,
+} as const;
+
+const MEDIA_TYPES: MediaType[] = ["YOUTUBE", "VIDEO", "IMAGE", "AUDIO", "EMBED"];
+const MEDIA_TYPE = {
+  IMAGE: "IMAGE" as MediaType,
+} as const;
 
 type PostActionState = {
   error?: string;
@@ -51,7 +62,7 @@ type PostEditorFormProps = {
 function createEmptyMediaDraft(): MediaDraft {
   return {
     id: `media-${Math.random().toString(36).slice(2)}`,
-    type: MediaType.IMAGE,
+    type: MEDIA_TYPE.IMAGE,
     url: "",
     caption: "",
   };
@@ -121,9 +132,9 @@ export function PostEditorForm({
           <label>
             Status
             <select name="status" defaultValue={initialValues.status}>
-              <option value={PostStatus.DRAFT}>Draft</option>
-              <option value={PostStatus.SCHEDULED}>Scheduled</option>
-              <option value={PostStatus.PUBLISHED}>Published</option>
+              <option value={POST_STATUS.DRAFT}>Draft</option>
+              <option value={POST_STATUS.SCHEDULED}>Scheduled</option>
+              <option value={POST_STATUS.PUBLISHED}>Published</option>
             </select>
           </label>
 
