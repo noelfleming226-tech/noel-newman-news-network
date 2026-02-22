@@ -22,3 +22,19 @@ export const MEDIA_TYPE = {
 } as const;
 
 export type MediaType = (typeof MEDIA_TYPE)[keyof typeof MEDIA_TYPE];
+
+export const COVER_IMAGE_SIZE = {
+  COMPACT: "COMPACT",
+  STANDARD: "STANDARD",
+  FEATURE: "FEATURE",
+} as const;
+
+export type CoverImageSize = (typeof COVER_IMAGE_SIZE)[keyof typeof COVER_IMAGE_SIZE];
+
+export const COVER_IMAGE_POSITION = {
+  TOP: "TOP",
+  CENTER: "CENTER",
+  BOTTOM: "BOTTOM",
+} as const;
+
+export type CoverImagePosition = (typeof COVER_IMAGE_POSITION)[keyof typeof COVER_IMAGE_POSITION];

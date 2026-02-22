@@ -3,6 +3,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 
 import { BrandMark } from "@/components/brand-mark";
+import { FounderBranding } from "@/components/founder-branding";
 import { PostCard } from "@/components/post-card";
 import { SiteHeader } from "@/components/site-header";
 import { getVisiblePosts } from "@/lib/posts";
@@ -27,6 +28,9 @@ export default async function HomePage() {
             News, analysis, and feature stories from a digital-first newsroom built for mixed media. Publish long-form
             text with embedded YouTube, video, audio, and image storytelling in one continuous experience.
           </p>
+          <div className="hero__founders">
+            <FounderBranding mode="chips" compact />
+          </div>
           {leadPost ? (
             <Link className="button button--primary" href={`/articles/${leadPost.slug}`}>
               Read Latest: {leadPost.title}
@@ -68,16 +72,7 @@ export default async function HomePage() {
         <section id="proprietors" className="proprietors">
           <p className="proprietors__eyebrow">NN^2 Ownership</p>
           <h2>Primary Proprietors</h2>
-          <div className="proprietors__grid">
-            <article>
-              <h3>Noel Fleming</h3>
-              <p>Co-proprietor focused on editorial leadership, community coverage, and platform strategy.</p>
-            </article>
-            <article>
-              <h3>Phil Newman</h3>
-              <p>Co-proprietor overseeing operations, growth, and multi-format content publishing workflows.</p>
-            </article>
-          </div>
+          <FounderBranding mode="cards" />
           <Link className="button button--ghost" href="/staff/login">
             Enter Staff Portal
           </Link>

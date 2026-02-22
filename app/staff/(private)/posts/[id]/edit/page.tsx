@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { PostEditorForm } from "@/components/staff/post-editor-form";
-import { getPostByIdForStaff } from "@/lib/posts";
+import { getCategoriesForStaff, getPostByIdForStaff } from "@/lib/posts";
 import { toDateTimeLocalValue } from "@/lib/post-utils";
 import { prisma } from "@/lib/prisma";
 
@@ -22,7 +22,7 @@ type EditPostPageProps = {
 export default async function EditPostPage({ params }: EditPostPageProps) {
   const { id } = await params;
 
-  const [post, authors] = await Promise.all([
+  const [post, authors, categories] = await Promise.all([
     getPostByIdForStaff(id),
     prisma.user.findMany({
       select: {
@@ -33,6 +33,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         name: "asc",
       },
     }),
+    getCategoriesForStaff(),
   ]);
 
   if (!post) {
@@ -45,6 +46,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
       description="Update content, media embeds, authorship, and scheduling controls."
       submitLabel="Save Changes"
       authors={authors}
+      categories={categories}
       action={savePostAction}
       initialValues={{
         postId: post.id,
@@ -52,9 +54,14 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         slug: post.slug,
         excerpt: post.excerpt ?? "",
         body: post.body,
+        categoryId: post.categoryId ?? "",
+        tags: post.tags.map((item) => item.tag.name).join(", "),
         status: post.status,
         publishedAt: toDateTimeLocalValue(post.publishedAt),
         coverImageUrl: post.coverImageUrl ?? "",
+        coverImageSize: post.coverImageSize,
+        coverImageHeight: post.coverImageHeight?.toString() ?? "",
+        coverImagePosition: post.coverImagePosition,
         authorId: post.authorId,
         media: (post as StaffPostForEdit).media.map((item: StaffPostForEdit["media"][number]) => ({
           id: item.id,

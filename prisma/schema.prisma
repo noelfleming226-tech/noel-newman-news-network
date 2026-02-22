@@ -25,6 +25,18 @@ enum MediaType {
   EMBED
 }
 
+enum CoverImageSize {
+  COMPACT
+  STANDARD
+  FEATURE
+}
+
+enum CoverImagePosition {
+  TOP
+  CENTER
+  BOTTOM
+}
+
 model User {
   id           String    @id @default(cuid())
   name         String
@@ -36,6 +48,22 @@ model User {
   sessions     Session[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  posts     PostTag[]
+  createdAt DateTime  @default(now())
 }
 
 model Session {
@@ -59,13 +87,20 @@ model Post {
   status        PostStatus   @default(DRAFT)
   publishedAt   DateTime?
   coverImageUrl String?
+  coverImageSize CoverImageSize @default(COMPACT)
+  coverImageHeight Int?
+  coverImagePosition CoverImagePosition @default(CENTER)
+  categoryId     String?
+  category       Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   authorId      String
   author        User         @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Restrict)
   media         MediaAsset[]
+  tags          PostTag[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
   @@index([status, publishedAt])
+  @@index([categoryId])
 }
 
 model MediaAsset {
@@ -79,4 +114,15 @@ model MediaAsset {
   createdAt DateTime  @default(now())
 
   @@index([postId, sortOrder])
+}
+
+model PostTag {
+  postId     String
+  tagId      String
+  assignedAt DateTime @default(now())
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@index([tagId])
 }

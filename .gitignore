@@ -44,6 +44,9 @@ next-env.d.ts
 
 # local preview artifacts
 .artifacts/
+cdp-snaps/
+test-results/
+playwright-temp.spec.ts
 
 # local sqlite db
 prisma/dev.db

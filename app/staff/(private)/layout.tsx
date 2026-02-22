@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { BrandMark } from "@/components/brand-mark";
+import { FounderBranding } from "@/components/founder-branding";
 import { requireStaffUser } from "@/lib/auth";
 
 import { logoutAction } from "./logout/actions";
@@ -17,6 +18,9 @@ export default async function StaffPrivateLayout({
       <aside className="staff-sidebar">
         <BrandMark />
         <p className="staff-sidebar__role">Staff Console</p>
+        <div className="staff-sidebar__founders">
+          <FounderBranding mode="chips" compact />
+        </div>
         <nav>
           <Link href="/staff">Dashboard</Link>
           <Link href="/staff/posts/new">New Post</Link>

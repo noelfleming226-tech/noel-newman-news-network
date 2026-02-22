@@ -45,6 +45,35 @@ async function main() {
     },
   });
 
+  const defaultCategories = [
+    { name: "Breaking News", slug: "breaking-news" },
+    { name: "Analysis", slug: "analysis" },
+    { name: "Business", slug: "business" },
+    { name: "Local", slug: "local" },
+    { name: "Opinion", slug: "opinion" },
+  ];
+
+  for (const category of defaultCategories) {
+    await prisma.category.upsert({
+      where: {
+        slug: category.slug,
+      },
+      update: {
+        name: category.name,
+      },
+      create: category,
+    });
+  }
+
+  const analysisCategory = await prisma.category.findUnique({
+    where: {
+      slug: "analysis",
+    },
+    select: {
+      id: true,
+    },
+  });
+
   const welcomeSlug = "welcome-to-noel-newman-news-network";
   const existingWelcomePost = await prisma.post.findUnique({
     where: {
@@ -75,6 +104,7 @@ async function main() {
         status: POST_STATUS.PUBLISHED,
         publishedAt: new Date(),
         authorId: noel.id,
+        categoryId: analysisCategory?.id ?? null,
         coverImageUrl:
           "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1400&q=80",
         media: {
@@ -90,6 +120,36 @@ async function main() {
               url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
               caption: "Sample external audio block.",
               sortOrder: 1,
+            },
+          ],
+        },
+        tags: {
+          create: [
+            {
+              tag: {
+                connectOrCreate: {
+                  where: {
+                    slug: "launch",
+                  },
+                  create: {
+                    name: "Launch",
+                    slug: "launch",
+                  },
+                },
+              },
+            },
+            {
+              tag: {
+                connectOrCreate: {
+                  where: {
+                    slug: "platform",
+                  },
+                  create: {
+                    name: "Platform",
+                    slug: "platform",
+                  },
+                },
+              },
             },
           ],
         },
